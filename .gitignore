@@ -1,0 +1,36 @@
+# Build trees
+build/
+cmake-build-*/
+cmake-build-*/
+out/
+**/CMakeCache.txt
+**/CMakeFiles/
+**/cmake_install.cmake
+**/Makefile
+**/compile_commands.json
+**/install_manifest.txt
+**/CTestTestfile.cmake
+**/_deps/
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+
+# Binaries produced in-tree
+aether_next
+aether_stubs
+
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.user
+*.workspace
+
+# Infection test artifacts (keep pristine victim_clean tracked)
+victim_infected
+*.infected

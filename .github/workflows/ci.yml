@@ -1,0 +1,64 @@
+name: ci
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  AETHER_LICENSE_ACCEPTED: I_ACCEPT_AETHER_LICENSE
+
+jobs:
+  build-test:
+    name: build-and-test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build -j 2
+
+      - name: Unit tests
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Prove shock (uniqueness + equivalence + morph_real)
+        run: |
+          mkdir -p artifacts
+          cmake --build build --target prove-shock
+
+      - name: Prove bench (≥1k corpus, break-rate 0)
+        run: cmake --build build --target prove-bench
+
+      - name: Upload gate artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate-reports-${{ matrix.os }}
+          path: |
+            artifacts/equiv_report.json
+            artifacts/bench_report.json
+          if-no-files-found: ignore
+
+  lab-x86_64:
+    name: lab-native-x86_64
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build lab image (native EAX required)
+        run: docker build -f Dockerfile.lab-x86_64 -t aether-lab .
+
+      - name: Run lab container (fail if native_checked == 0)
+        run: |
+          docker run --rm aether-lab \
+            ./build/aether_core_tests equivalence | tee /tmp/lab-equiv.txt
+          grep -E 'native x64 checks : [1-9]' /tmp/lab-equiv.txt
+          grep -q 'breaks=0' /tmp/lab-equiv.txt

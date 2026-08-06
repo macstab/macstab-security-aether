@@ -1,0 +1,24 @@
+# Lab-only x86-64 image: native EAX oracle (try_exec_x64) + full prove-shock.
+# Build/run on amd64 (or: docker buildx build --platform linux/amd64 ...):
+#
+#   docker build -f Dockerfile.lab-x86_64 -t aether-lab .
+#   docker run --rm aether-lab
+#
+FROM --platform=linux/amd64 debian:bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake git ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /src
+COPY . .
+RUN rm -rf build \
+    && cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+    && cmake --build build -j \
+    && cmake --build build --target prove-shock \
+    && cmake --build build --target prove-bench \
+    && ./build/aether_core_tests equivalence | tee /tmp/equiv.txt \
+    && grep -E 'native x64 checks : [1-9][0-9]*' /tmp/equiv.txt \
+    && grep -q 'breaks=0' /tmp/equiv.txt \
+    && grep -q 'VERDICT           : PASS' /tmp/equiv.txt \
+    && test -f artifacts/bench_report.json \
+    && grep -q '"pass": true' artifacts/bench_report.json
+CMD ["ctest", "--test-dir", "build", "--output-on-failure"]

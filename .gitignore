@@ -34,3 +34,11 @@ aether_stubs
 # Infection test artifacts (keep pristine victim_clean tracked)
 victim_infected
 *.infected
+
+# Generated gate reports (CI uploads separately)
+artifacts/
+
+# Optional local Zydis vendor tree (use scripts/vendor_zydis.sh)
+third_party/
+# Large third-party binaries (fetch via scripts/fetch_third_party_corpus.sh)
+corpus/third_party/

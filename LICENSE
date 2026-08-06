@@ -1,0 +1,66 @@
+Aether Research License (Company / Lab / Authorized Private Legal Use)
+
+Copyright (c) 2024–2026 Aether Research Project contributors.
+All rights reserved unless otherwise granted below.
+
+0. Acceptance (required)
+
+   By downloading, building, linking, running, or otherwise using this
+   software (or any portion of it), you acknowledge that you have read,
+   understood, and agree to be bound by this LICENSE in the repository
+   root. If you do not agree, you must not use the software.
+
+   Machine-readable acceptance for automated/CI builds may be given by
+   setting the environment variable:
+
+     AETHER_LICENSE_ACCEPTED=I_ACCEPT_AETHER_LICENSE
+
+   or by calling aether_accept_license() from the C API after presenting
+   this LICENSE to an authorized human operator. See docs/LICENSE_ACCEPTANCE.md.
+
+1. Grant of rights (authorized use only)
+
+   Subject to the conditions below, you may use, copy, modify, and
+   build this software **only** for:
+
+   - defensive security research and education
+   - authorized red-team / purple-team lab exercises
+   - product evaluation of metamorphic / poly techniques
+   - detection engineering and academic publication of defensive findings
+   - private use that is **lawful** and **authorized** on systems you own
+     or have explicit written permission to test (including internal company
+     and properly authorized private legal / security work)
+
+   "Private" does **not** mean unrestricted personal misuse. Unauthorized
+   access, spreading, or production of covert malware for illegal ends is
+   prohibited.
+
+2. Conditions
+
+   a. **No mass infection or automated spreading.** Infection APIs may
+      only modify a single file path explicitly supplied by an operator.
+   b. **No covert commercial malware product.** Do not ship this as
+      undetectable implant / C2 / persistence tooling for unauthorized use.
+   c. **Compliance.** You are solely responsible for complying with
+      applicable law, employer policy, and customer contracts.
+   d. **Attribution.** Retain this LICENSE and copyright notices in
+      redistributed source copies and in source file headers.
+   e. **No warranty.** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY
+      OF ANY KIND. AUTHORS ARE NOT LIABLE FOR ANY DAMAGES ARISING FROM USE.
+
+3. Commercial redistribution / SaaS / resale
+
+   Redistribution outside your organization, OEM embedding, or resale as
+   a commercial product requires a separate written agreement with the
+   copyright holders. Contact legal counsel before external distribution.
+
+4. Research honesty
+
+   Claims about uniqueness, equivalence, or strength must match automated
+   scorecard results (docs/SCORECARD.md). Do not market "undetectable"
+   or "impossible to observe" capabilities.
+
+For dual-licensing or enterprise OEM terms, replace this file with your
+company's standard commercial license after legal review.
+
+THIS IS NOT LEGAL ADVICE. Have qualified counsel review before commercial release.

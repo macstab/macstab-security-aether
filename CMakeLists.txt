@@ -8,7 +8,8 @@ if(NOT AETHER_VERSION MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+")
 endif()
 
 project(AetherResearch VERSION ${AETHER_VERSION} LANGUAGES C CXX)
-message(STATUS "Aether ${PROJECT_VERSION} — company/lab research build")
+# Product of Macstab GmbH
+message(STATUS "Aether ${PROJECT_VERSION} — Macstab GmbH lab research build")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

@@ -6,6 +6,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Changed
+- Copyright / vendor branding: **Macstab GmbH**
+
+
+### Changed
 - Repository restructure: `include/aether/` (public API), `lib/aether/` (impl), `apps/`, `stubs/`
 - See `docs/REPOSITORY_LAYOUT.md`
 

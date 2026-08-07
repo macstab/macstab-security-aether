@@ -1,6 +1,6 @@
 /**
  * SPDX-License-Identifier: LicenseRef-Aether-Research
- * Copyright (c) 2024–2026 Aether Research Project contributors.
+ * Copyright (c) 2024–2026 Macstab GmbH.
  *
  * Licensed under the Aether Research License in the repository root file
  * LICENSE. Authorized lab / lawful private use only as defined there.
@@ -9,7 +9,7 @@
 
 /**
  * @file aether.h
- * @brief Stable C API for Aether research morph engine (company / lab).
+ * @brief Stable C API for Aether research morph engine (Macstab GmbH lab).
  *
  * Versioning: AETHER_VERSION_* macros match VERSION file at release.
  * Link: libaether_core + Zydis.

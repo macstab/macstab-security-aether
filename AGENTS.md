@@ -1,6 +1,9 @@
-# AGENTS.md — Aether Research Project
+# AGENTS.md — Aether (Macstab GmbH)
 
 ## Project Purpose
+
+**Copyright / vendor:** Macstab GmbH.
+
 
 **Company / lab** educational–defensive metamorphic research platform.
 Demonstrates advanced code mutation, continuous self-modification, and controlled ELF infection techniques for academic and authorized red-team learning.

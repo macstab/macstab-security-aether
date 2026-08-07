@@ -4,13 +4,13 @@ Target audience: internal security labs, authorized evaluation hosts, CI runners
 
 ## Requirements
 
-| Item | Notes |
-|------|--------|
-| CMake ≥ 3.14 | |
-| C++17 compiler | clang or gcc |
+| Item                      | Notes                                                  |
+|---------------------------|--------------------------------------------------------|
+| CMake ≥ 3.14              |                                                        |
+| C++17 compiler            | clang or gcc                                           |
 | Network (first configure) | FetchContent pulls Zydis v4.1.1; air-gap: vendor Zydis |
-| Linux x86-64 (optional) | Native EAX dual oracle |
-| Docker (optional) | `Dockerfile.lab-x86_64` for amd64 proof |
+| Linux x86-64 (optional)   | Native EAX dual oracle                                 |
+| Docker (optional)         | `Dockerfile.lab-x86_64` for amd64 proof                |
 
 ## Quick start
 
@@ -45,13 +45,13 @@ Expect report line: `native x64 checks : N  breaks=0` with `N > 0`.
 
 ## Binaries
 
-| Binary | Role |
-|--------|------|
-| `aether_next` | Research runtime (idle / fire / cascade) |
-| `aether_shock` | Live uniqueness / permute / cascade demo |
-| `aether_disasm` | Zydis real `.text` dump |
-| `aether_core_tests` | Unit + gate suite |
-| `aether_stubs` | Empty advanced stubs (training only) |
+| Binary              | Role                                     |
+|---------------------|------------------------------------------|
+| `aether_next`       | Research runtime (idle / fire / cascade) |
+| `aether_shock`      | Live uniqueness / permute / cascade demo |
+| `aether_disasm`     | Zydis real `.text` dump                  |
+| `aether_core_tests` | Unit + gate suite                        |
+| `aether_stubs`      | Empty advanced stubs (training only)     |
 
 ## Operator rules (non-negotiable)
 
@@ -69,8 +69,8 @@ cmake --build build --target install
 
 ## Support model
 
-| Tier | Expectation |
-|------|-------------|
-| Internal lab | Build + gates + docs in this repo |
-| Enterprise OEM | Separate commercial license (see LICENSE §3) |
-| Public research | Cite SCORECARD; no “undetectable” claims |
+| Tier            | Expectation                                  |
+|-----------------|----------------------------------------------|
+| Internal lab    | Build + gates + docs in this repo            |
+| Enterprise OEM  | Separate commercial license (see LICENSE §3) |
+| Public research | Cite SCORECARD; no “undetectable” claims     |

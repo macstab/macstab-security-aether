@@ -1,4 +1,4 @@
-# Support
+# Support — Macstab GmbH / Support
 
 ## How to report bugs
 

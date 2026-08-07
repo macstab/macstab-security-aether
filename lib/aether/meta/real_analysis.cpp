@@ -1,6 +1,6 @@
 /**
  * SPDX-License-Identifier: LicenseRef-Aether-Research
- * Copyright (c) 2024–2026 Aether Research Project contributors.
+ * Copyright (c) 2024–2026 Macstab GmbH.
  *
  * Licensed under the Aether Research License in the repository root file
  * LICENSE. Authorized lab / lawful private use only as defined there.

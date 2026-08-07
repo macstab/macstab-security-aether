@@ -1,3 +1,5 @@
+**Vendor:** Macstab GmbH
+
 # Aether — product brief (company internal)
 
 ## What this is

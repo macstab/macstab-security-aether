@@ -14,12 +14,12 @@
 
 ## What this is not
 
-| Not | Why |
-|-----|-----|
-| Production EDR bypass product | Not designed or warranted for that |
-| Auto-spreading worm kit | Explicitly forbidden |
+| Not                                | Why                                       |
+|------------------------------------|-------------------------------------------|
+| Production EDR bypass product      | Not designed or warranted for that        |
+| Auto-spreading worm kit            | Explicitly forbidden                      |
 | Full commercial metamorphic engine | Restricted morph domain; honest scorecard |
-| Undetectable implant | Live sensors still observe init |
+| Undetectable implant               | Live sensors still observe init           |
 
 ## Value for the company
 

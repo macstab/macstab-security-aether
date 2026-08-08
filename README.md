@@ -2,13 +2,13 @@
 
 **Lab morph engine + proof** by **Macstab GmbH** — generate metamorphic variants under a documented scope and **prove** they do not break semantics. For authorized research, training, and **scanner/detection stress tests**. Not an undetectable implant.
 
-| | |
-|--|--|
-| **Version** | **3.0.0 Industry Morph Framework** (scoped lab — see `docs/INDUSTRY_STATUS.md`) |
-| **Vendor** | Macstab GmbH |
-| **License** | Macstab GmbH lab / company research terms — see `LICENSE` |
-| **Scope contract** | [`docs/SCOPE.md`](docs/SCOPE.md) |
-| **Status** | Final lab product freeze (no C2/spread features) |
+| |                                                                                 |
+|--|---------------------------------------------------------------------------------|
+| **Version** | **1.0.0 Industry Morph Framework** (scoped lab — see `docs/INDUSTRY_STATUS.md`) |
+| **Vendor** | Macstab GmbH                                                                    |
+| **License** | Macstab GmbH lab / company research terms — see `LICENSE`                       |
+| **Scope contract** | [`docs/SCOPE.md`](docs/SCOPE.md)                                                |
+| **Status** | Final lab product freeze (no C2/spread features)                                |
 
 ---
 

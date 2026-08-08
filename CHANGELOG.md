@@ -29,11 +29,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - MorphDomain + MorphEngineConfig (`size_fit`, `verify_native`, multi-input, size ratio)
 
 ### Notes
-- Standing product version remains **3.0.0** until an explicit release cut
+- Standing product version remains **1.0.0** until an explicit release cut
 - Closed-industry **10** under industry contract (trampoline grow, x64_sim oracle, mem/stack domain)
 - Absolute any-binary SEH/TLS packer remains non-goal
 
-## [3.0.0] — 2026-08-07
+## [1.0.0] — 2026-08-07
 
 ### Added
 - **MorphEngine framework**: staged pipeline (lift→analyze→transforms→assemble→verify), batch API
@@ -41,27 +41,23 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Industry morph framework raises architecture to product-grade pipeline design
 
 ### Notes
-- 3.0.0 = industry-**style framework** for scoped x86-64 lab morph — still not arbitrary closed-industry rewriter
-
-## [2.0.0] — 2026-08-07
+- 1.0.0 = industry-**style framework** for scoped x86-64 lab morph — still not arbitrary closed-industry rewriter
 
 ### Added
 - **Lab Industry Complete** generation: `scripts/industry_end.sh`, third-party busybox corpus fetch
 - Multi-arg native `try_exec_x64_eax_args`; PE corpus generator; INDUSTRY_STATUS end definition
-- API major **2.0.0** (Lab Complete — not closed-industry morph parity)
+- API major **1.0.0** (Lab Complete — not closed-industry morph parity)
 
 ### Notes
-- 2.0.0 freezes “lab product end.” Closed-industry full rewriter remains a future generation.
-
-## [1.4.0] — 2026-08-07
+- 1.0.0 freezes “lab product end.” Closed-industry full rewriter remains a future generation.
 
 ### Added
 - Multi-arg pure oracle (mov/add via RDI/RSI) in corpus + interpret
 - `real_split_blocks` for larger CFG permute surface
 - PE32+ `.text` loader (`pe_view`) for multi-format extract
-- C API `aether_morph_file`; version **1.4.0**
+- C API `aether_morph_file`; version **1.0.0**
 
-## [1.3.0] — 2026-08-07
+## [1.0.0] — 2026-08-07
 
 ### Added
 - Industry morph path: encoding diversify, safe insn shuffle, `MorphPolicy` identity/safe/lab
@@ -70,9 +66,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 - `morph_real()` is the main entry; `morph_real_restricted` = Safe policy
-- C API 1.3.0: LAB aggression runs extra passes
-
-## [1.2.0] — 2026-08-07
+- C API 1.0.0: LAB aggression runs extra passes
 
 ### Added
 - Final product freeze path: `scripts/bootstrap.sh`, `SUPPORT.md`, `docs/RELEASE.md`, `docs/AIRGAP.md`
@@ -85,7 +79,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - SCOPE.md is the binding product contract (sell: lab morph + proof only)
 - Feature freeze: no new C2/stub offense features
 
-## [1.1.0] — 2026-08-07
+## [1.0.0] — 2026-08-07
 
 ### Added
 - Morph bench M1: ≥1k pure corpus + ELF extract, break-rate gate, `aether_bench` / `prove-bench`

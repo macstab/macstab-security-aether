@@ -1,7 +1,7 @@
 # Aether — product scope (contract)
 
 **This file is the scope contract for licensees, CI, and marketing.**  
-**Version:** 3.0.0 (keep in sync with `VERSION` / `aether.h`)
+**Version:** 1.0.0 (keep in sync with `VERSION` / `aether.h`)
 
 **Product:** Aether — lab metamorphic research engine  
 **Claim level:** research / company lab (not closed-industry full binary rewriter)

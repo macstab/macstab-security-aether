@@ -30,7 +30,7 @@ extern "C" {
 #define AETHER_VERSION_MAJOR 3
 #define AETHER_VERSION_MINOR 0
 #define AETHER_VERSION_PATCH 0
-#define AETHER_VERSION_STRING "3.0.0"
+#define AETHER_VERSION_STRING "1.0.0"
 
 /** Compile-time ABI check helper for clients. */
 #define AETHER_API_VERSION 0x00030000u

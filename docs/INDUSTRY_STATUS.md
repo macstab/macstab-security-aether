@@ -1,6 +1,6 @@
-# Industry morph framework status (3.0.0 standing — closed-industry **10** under contract)
+# Industry morph framework status (1.0.0 standing — closed-industry **10** under contract)
 
-**VERSION remains 3.0.0 until an explicit release cut.**  
+**VERSION remains 1.0.0 until an explicit release cut.**  
 Closed-industry arbitrary rewriter is **complete under the industry contract** below.
 
 ## Industry-10 contract (definition of done)

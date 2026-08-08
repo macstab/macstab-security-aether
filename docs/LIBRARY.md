@@ -1,7 +1,7 @@
 # Aether as a pure library (Macstab GmbH)
 
 **Primary product:** embeddable **x86-64 morph + proof** library.  
-**VERSION standing:** 3.0.0 (see `VERSION`).
+**VERSION standing:** 1.0.0 (see `VERSION`).
 
 ## What to use (library surface)
 

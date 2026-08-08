@@ -49,8 +49,8 @@ CI and release workflows follow the proven **chaos-testing-libraries** shape:
 
 ```bash
 # ensure VERSION matches tag
-git tag v3.0.0
-git push origin v3.0.0
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 Requires `contents: write` (default `GITHUB_TOKEN`).  

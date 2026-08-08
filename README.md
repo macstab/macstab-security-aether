@@ -20,6 +20,10 @@ Library focus: [`docs/LIBRARY.md`](docs/LIBRARY.md) · Details: [`docs/PRODUCT.m
 
 ---
 
+## CI / release
+
+GitHub Actions pipelines are adapted from the working **Macstab chaos-testing-libraries** release flow (CI + tag release). See `docs/RELEASE.md`.
+
 ## Quick start (one path)
 
 ```bash

@@ -34,3 +34,26 @@ cmake --build build -j
 
 Lab morph engine with equivalence-enforced CI and regenerable bench.  
 **Not** an undetectable implant product.
+
+## GitHub Actions (Macstab pipeline)
+
+CI and release workflows follow the proven **chaos-testing-libraries** shape:
+
+| Workflow | Trigger | Role |
+|----------|---------|------|
+| `.github/workflows/ci.yml` | push / PR | format, matrix build+test, prove-industry, lab Docker |
+| `.github/workflows/release.yml` | version tags | package tarball + SHA256SUMS + GitHub Release |
+| `.github/workflows/codeql.yml` | main / schedule | CodeQL C/C++ |
+
+### Cut a release
+
+```bash
+# ensure VERSION matches tag
+git tag v3.0.0
+git push origin v3.0.0
+```
+
+Requires `contents: write` (default `GITHUB_TOKEN`).  
+Optional bot PR for changelog: `BOT_GITHUB_TOKEN`, `BOT_USER_NAME`, `BOT_USER_EMAIL` (same as chaos).
+
+License: CI sets `AETHER_LICENSE_ACCEPTED=I_ACCEPT_AETHER_LICENSE`.

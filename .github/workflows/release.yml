@@ -1,0 +1,212 @@
+# Adapted from Macstab chaos-testing-libraries release.yml (proven tag → GH release).
+name: release
+
+on:
+  push:
+    tags: ["v[0-9]*.[0-9]*.[0-9]*", "[0-9]*.[0-9]*.[0-9]*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  AETHER_LICENSE_ACCEPTED: I_ACCEPT_AETHER_LICENSE
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build:
+    name: build release artifacts
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake ninja-build
+
+      - name: Configure Release
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DAETHER_BUILD_EXTRAS=ON
+
+      - name: Build library + CLIs + gates
+        run: |
+          cmake --build build -j 2
+          cmake --build build --target prove-industry
+
+      - name: Package dist/
+        run: |
+          set -euo pipefail
+          TAG=${GITHUB_REF#refs/tags/}
+          TAG_CLEAN=${TAG#v}
+          DEST=dist/aether-${TAG_CLEAN}-linux-x86_64
+          mkdir -p "$DEST/include" "$DEST/lib" "$DEST/bin" "$DEST/docs" "$DEST/corpus"
+          cp -a include/aether "$DEST/include/"
+          cp -a build/libaether_core.a "$DEST/lib/"
+          for b in aether_morph aether_bench aether_disasm; do
+            test -x "build/$b" && cp -a "build/$b" "$DEST/bin/"
+          done
+          for b in aether_shock aether_next; do
+            test -x "build/$b" && cp -a "build/$b" "$DEST/bin/" || true
+          done
+          cp LICENSE VERSION README.md CHANGELOG.md SECURITY.md SUPPORT.md "$DEST/"
+          cp -a docs/*.md "$DEST/docs/" 2>/dev/null || true
+          cp -a corpus/real_corpus.elf "$DEST/corpus/" 2>/dev/null || true
+          mkdir -p artifacts
+          test -f artifacts/bench_report.json && cp artifacts/bench_report.json "$DEST/" || true
+          # tarball
+          mkdir -p dist
+          tar -C dist -czf "dist/aether-${TAG_CLEAN}-linux-x86_64.tar.gz" "aether-${TAG_CLEAN}-linux-x86_64"
+          (cd dist && sha256sum "aether-${TAG_CLEAN}-linux-x86_64.tar.gz" > SHA256SUMS)
+          echo "::group::SHA256SUMS"
+          cat dist/SHA256SUMS
+          echo "::endgroup::"
+          ls -la dist/
+
+      - name: Upload release build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-binaries
+          path: |
+            dist/*.tar.gz
+            dist/SHA256SUMS
+          retention-days: 14
+          if-no-files-found: error
+
+  release:
+    name: publish GitHub release
+    runs-on: ubuntu-24.04
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-binaries
+          path: release-assets/
+
+      - name: Generate CHANGELOG.md with git-cliff (optional)
+        continue-on-error: true
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --verbose
+        env:
+          OUTPUT: CHANGELOG.md
+          GITHUB_REPO: ${{ github.repository }}
+
+      - name: Generate release notes
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          TAG_CLEAN=${TAG#v}
+          {
+            echo "## Aether $TAG — Macstab GmbH"
+            echo ""
+            echo "Lab x86-64 **morph + proof** library (authorized research / detection stress)."
+            echo ""
+            echo "### Package"
+            echo ""
+            echo "| Asset | Contents |"
+            echo "|-------|----------|"
+            echo "| \`aether-${TAG_CLEAN}-linux-x86_64.tar.gz\` | \`libaether_core.a\`, public headers, CLIs, docs, LICENSE |"
+            echo "| \`SHA256SUMS\` | Checksums |"
+            echo ""
+            echo "Verify:"
+            echo "\`\`\`sh"
+            echo "sha256sum -c SHA256SUMS --ignore-missing"
+            echo "\`\`\`"
+            echo ""
+            echo "### License"
+            echo ""
+            echo "Using this software means you accept the root [LICENSE](LICENSE)."
+            echo "CI/automation: \`AETHER_LICENSE_ACCEPTED=I_ACCEPT_AETHER_LICENSE\`"
+            echo "See [docs/LICENSE_ACCEPTANCE.md](docs/LICENSE_ACCEPTANCE.md)."
+            echo ""
+            echo "### Quick start"
+            echo ""
+            echo "\`\`\`sh"
+            echo "export AETHER_LICENSE_ACCEPTED=I_ACCEPT_AETHER_LICENSE"
+            echo "cmake -S . -B build && cmake --build build --target prove-industry"
+            echo "./build/aether_morph --help"
+            echo "\`\`\`"
+            echo ""
+            echo "Vendor: **Macstab GmbH**"
+          } > release-notes.md
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG=${GITHUB_REF#refs/tags/}
+          TITLE="Aether $TAG (Macstab GmbH)"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" \
+              --title "$TITLE" \
+              --notes-file release-notes.md \
+              --draft=false
+            gh release upload "$TAG" \
+              release-assets/*.tar.gz \
+              release-assets/SHA256SUMS \
+              --clobber
+            if [ -f CHANGELOG.md ]; then
+              gh release upload "$TAG" CHANGELOG.md --clobber || true
+            fi
+          else
+            ASSETS=(release-assets/*.tar.gz release-assets/SHA256SUMS)
+            if [ -f CHANGELOG.md ]; then
+              ASSETS+=(CHANGELOG.md)
+            fi
+            gh release create "$TAG" \
+              --title "$TITLE" \
+              --notes-file release-notes.md \
+              --verify-tag \
+              "${ASSETS[@]}"
+          fi
+
+      - name: Open auto-merged PR with CHANGELOG.md (optional bot)
+        # Same pattern as chaos release: non-blocking if bot secrets missing
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+        run: |
+          if [ -z "${{ secrets.BOT_GITHUB_TOKEN }}" ]; then
+            echo "BOT_GITHUB_TOKEN not set — skip changelog PR"
+            exit 0
+          fi
+          if [ ! -f CHANGELOG.md ]; then
+            echo "No CHANGELOG from cliff — skip"
+            exit 0
+          fi
+          TAG=${GITHUB_REF#refs/tags/}
+          BRANCH="chore/changelog-${TAG}"
+          git config user.name  "${{ secrets.BOT_USER_NAME }}"
+          git config user.email "${{ secrets.BOT_USER_EMAIL }}"
+          cp CHANGELOG.md /tmp/CHANGELOG_release.md
+          git remote set-url origin https://x-access-token:${{ secrets.BOT_GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          git fetch origin main
+          git checkout -B "$BRANCH" origin/main
+          cp /tmp/CHANGELOG_release.md CHANGELOG.md
+          git add CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "No changelog changes — skipping PR"
+            exit 0
+          fi
+          git commit -m "docs: update CHANGELOG for $TAG"
+          git push --force origin "$BRANCH"
+          if ! gh pr create --base main --head "$BRANCH" \
+                --title "docs: update CHANGELOG for $TAG" \
+                --body "Auto-generated changelog update for release $TAG." 2>/tmp/pr.err; then
+            cat /tmp/pr.err || true
+            echo "::warning::changelog PR could not be created"
+            exit 0
+          fi
+          gh pr merge "$BRANCH" --squash --admin --delete-branch \
+            || gh pr merge "$BRANCH" --squash --admin --auto --delete-branch \
+            || echo "::warning::changelog PR merge deferred"

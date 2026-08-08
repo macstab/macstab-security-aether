@@ -22,3 +22,4 @@ RUN rm -rf build \
     && test -f artifacts/bench_report.json \
     && grep -q '"pass": true' artifacts/bench_report.json
 CMD ["ctest", "--test-dir", "build", "--output-on-failure"]
+ENV AETHER_LICENSE_ACCEPTED=I_ACCEPT_AETHER_LICENSE

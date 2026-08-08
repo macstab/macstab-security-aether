@@ -66,18 +66,15 @@ std::vector<uint8_t> morph_real(const uint8_t* code,
                                 MorphPolicy policy = MorphPolicy::Safe);
 
 /** Alias: Safe policy (backward compatible). */
-std::vector<uint8_t> morph_real_restricted(const uint8_t* code,
-                                           size_t len,
-                                           uint64_t base_address = 0x1000);
+std::vector<uint8_t>
+morph_real_restricted(const uint8_t* code, size_t len, uint64_t base_address = 0x1000);
 
 /**
  * Pure-function subset interpreter over RealFunc.
  * @param rdi RSI-style: initial RDI (SysV first arg), used for mov eax,edi etc.
  * @param rsi initial RSI (second arg)
  */
-std::optional<uint32_t> interpret_real_pure(const RealFunc& f,
-                                            uint64_t rdi = 0,
-                                            uint64_t rsi = 0);
+std::optional<uint32_t> interpret_real_pure(const RealFunc& f, uint64_t rdi = 0, uint64_t rsi = 0);
 
 /** Split large blocks to grow CFG surface for permute (fallthrough chain). */
 void real_split_blocks(RealFunc& f, size_t max_insns = 6);

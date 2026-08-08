@@ -64,8 +64,12 @@ void test_morph_engine() {
     uint8_t* out = nullptr;
     size_t out_len = 0;
     TEST_CHECK(kTest,
-               aether_morph_buffer_ex(inputs[0].data(), inputs[0].size(), 0x1000,
-                                      AETHER_PRODUCT_LAB, AETHER_AGGR_SAFE, &out, &out_len) ==
-                   AETHER_OK);
+               aether_morph_buffer_ex(inputs[0].data(),
+                                      inputs[0].size(),
+                                      0x1000,
+                                      AETHER_PRODUCT_LAB,
+                                      AETHER_AGGR_SAFE,
+                                      &out,
+                                      &out_len) == AETHER_OK);
     aether_free(out);
 }

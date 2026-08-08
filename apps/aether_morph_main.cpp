@@ -104,8 +104,9 @@ int main(int argc, char** argv) {
         else if (!std::strcmp(argv[i], "--seed") && i + 1 < argc)
             seed = std::strtoull(argv[++i], nullptr, 0);
         else if (!std::strcmp(argv[i], "--help")) {
-            std::printf("Usage: %s (--in file | --hex HEX) [--out file] [--policy safe|lab|identity]\n",
-                        argv[0]);
+            std::printf(
+                "Usage: %s (--in file | --hex HEX) [--out file] [--policy safe|lab|identity]\n",
+                argv[0]);
             return 0;
         }
     }

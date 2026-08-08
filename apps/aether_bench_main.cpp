@@ -37,8 +37,7 @@ int main(int argc, char** argv) {
         else if (!std::strcmp(argv[i], "--rounds") && i + 1 < argc)
             rounds = (int)std::strtol(argv[++i], nullptr, 10);
         else if (!std::strcmp(argv[i], "--help")) {
-            std::printf("Usage: %s [--count N] [--elf path] [--json path] [--rounds R]\n",
-                        argv[0]);
+            std::printf("Usage: %s [--count N] [--elf path] [--json path] [--rounds R]\n", argv[0]);
             return 0;
         }
     }

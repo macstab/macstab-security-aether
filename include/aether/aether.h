@@ -40,14 +40,15 @@ typedef enum aether_aggression {
     AETHER_AGGR_IDENTITY = 0,
     AETHER_AGGR_SAFE = 1, /**< nops + permute + encoding diversify + shuffle */
     AETHER_AGGR_LAB = 2,  /**< Safe + extra morph passes */
-    AETHER_AGGR_INDUSTRY_EXPERIMENTAL = 3 /**< best-effort structural; pure still checked when possible */
+    AETHER_AGGR_INDUSTRY_EXPERIMENTAL =
+        3 /**< best-effort structural; pure still checked when possible */
 } aether_aggression;
 
 /** Product guarantee mode. */
 typedef enum aether_product_mode {
-    AETHER_PRODUCT_LAB = 0,                  /**< 0 pure breaks required (lab 10) */
-    AETHER_PRODUCT_INDUSTRY_EXPERIMENTAL = 1,/**< best-effort structural */
-    AETHER_PRODUCT_INDUSTRY = 2              /**< hard pure + multi-input; binary rewrite path */
+    AETHER_PRODUCT_LAB = 0,                   /**< 0 pure breaks required (lab 10) */
+    AETHER_PRODUCT_INDUSTRY_EXPERIMENTAL = 1, /**< best-effort structural */
+    AETHER_PRODUCT_INDUSTRY = 2               /**< hard pure + multi-input; binary rewrite path */
 } aether_product_mode;
 
 /** Result codes. */
@@ -96,9 +97,7 @@ aether_status aether_morph_buffer_ex(const uint8_t* in,
  * Morph a raw binary file (entire file as code buffer).
  * Writes output file; for ELF/PE prefer extracting .text first via tools.
  */
-aether_status aether_morph_file(const char* in_path,
-                                const char* out_path,
-                                aether_aggression aggr);
+aether_status aether_morph_file(const char* in_path, const char* out_path, aether_aggression aggr);
 
 /** Free buffer from aether_morph_buffer. */
 void aether_free(void* p);
@@ -107,10 +106,8 @@ void aether_free(void* p);
  * Run morph bench (≥1k pure + ELF extract). Writes JSON report if path non-NULL.
  * @return AETHER_OK if break_rate==0 and corpus≥1000
  */
-aether_status aether_run_bench(size_t pure_count,
-                               const char* elf_path,
-                               const char* json_out_path,
-                               int* out_pass);
+aether_status
+aether_run_bench(size_t pure_count, const char* elf_path, const char* json_out_path, int* out_pass);
 
 /**
  * Industry binary rewrite: morph ELF/PE .text in-place if size fits (nop pad).

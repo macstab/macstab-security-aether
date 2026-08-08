@@ -25,8 +25,8 @@
 namespace aether {
 
 struct ExtractedFunc {
-    size_t offset = 0;     ///< offset into source buffer
-    uint64_t vaddr = 0;    ///< virtual address of first byte
+    size_t offset = 0;  ///< offset into source buffer
+    uint64_t vaddr = 0; ///< virtual address of first byte
     std::vector<uint8_t> bytes;
     bool pure_interpretable = false; ///< interpret_real_pure succeeds on entry
     uint32_t pure_rax = 0;           ///< if pure_interpretable

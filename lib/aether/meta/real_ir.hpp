@@ -36,13 +36,13 @@ constexpr uint32_t kGprRdi = 1u << 7;
 
 /** One decoded machine instruction (ground truth from Zydis). */
 struct RealInsn {
-    uint64_t address = 0;           ///< runtime/VA or file-relative base + offset
-    size_t offset = 0;              ///< offset into the owning buffer
-    size_t length = 0;              ///< instruction size in bytes
-    std::vector<uint8_t> bytes;     ///< raw opcode bytes
-    std::string text;               ///< Intel-syntax disassembly text
+    uint64_t address = 0;       ///< runtime/VA or file-relative base + offset
+    size_t offset = 0;          ///< offset into the owning buffer
+    size_t length = 0;          ///< instruction size in bytes
+    std::vector<uint8_t> bytes; ///< raw opcode bytes
+    std::string text;           ///< Intel-syntax disassembly text
 
-    bool is_branch = false;         ///< any control-flow transfer
+    bool is_branch = false; ///< any control-flow transfer
     bool is_call = false;
     bool is_ret = false;
     bool is_uncond_jump = false;    ///< jmp (not call)
@@ -63,15 +63,15 @@ struct RealInsn {
 /** Basic block over RealInsn indices. */
 struct RealBlock {
     int id = 0;
-    size_t start_idx = 0;           ///< first instruction index in RealFunc::insns
-    size_t end_idx = 0;             ///< one-past-last instruction index
-    int fallthrough = -1;           ///< next block id if execution falls through
-    int branch = -1;                ///< taken target block id for jcc/jmp when known
+    size_t start_idx = 0; ///< first instruction index in RealFunc::insns
+    size_t end_idx = 0;   ///< one-past-last instruction index
+    int fallthrough = -1; ///< next block id if execution falls through
+    int branch = -1;      ///< taken target block id for jcc/jmp when known
 };
 
 /** A decoded function or code region. */
 struct RealFunc {
-    uint64_t base_address = 0;      ///< address of insns[0]
+    uint64_t base_address = 0; ///< address of insns[0]
     std::vector<RealInsn> insns;
     std::vector<RealBlock> blocks;
     int entry = 0;

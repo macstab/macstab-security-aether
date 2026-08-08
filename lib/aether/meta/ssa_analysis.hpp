@@ -34,14 +34,14 @@ struct StackSlot {
 };
 
 struct InsnDataflow {
-    uint32_t gpr_def = 0;   ///< bits written (kGpr*)
-    uint32_t gpr_use = 0;   ///< bits read
+    uint32_t gpr_def = 0; ///< bits written (kGpr*)
+    uint32_t gpr_use = 0; ///< bits read
     bool def_flags = false;
     bool use_flags = false;
-    bool mem_def = false;   ///< stores
-    bool mem_use = false;   ///< loads
+    bool mem_def = false;        ///< stores
+    bool mem_use = false;        ///< loads
     bool stack_only_mem = false; ///< mem only via RSP/RBP (frame)
-    int32_t stack_disp = 0; ///< if stack_only_mem, approximate disp
+    int32_t stack_disp = 0;      ///< if stack_only_mem, approximate disp
     bool is_call = false;
     bool is_control = false;
     bool opaque = false;
@@ -49,8 +49,8 @@ struct InsnDataflow {
 
 struct FuncSsa {
     std::vector<InsnDataflow> per_insn;
-    uint32_t live_in = 0;   ///< GPRs live at entry (args: rdi,rsi often)
-    uint32_t live_out = 0;  ///< GPRs live at exit (rax typically)
+    uint32_t live_in = 0;  ///< GPRs live at entry (args: rdi,rsi often)
+    uint32_t live_out = 0; ///< GPRs live at exit (rax typically)
     bool has_calls = false;
     bool has_nonstack_mem = false;
     bool analysis_ok = false;

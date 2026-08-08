@@ -76,13 +76,10 @@ inline std::optional<uint32_t> try_exec_x64_eax(const std::vector<uint8_t>& code
 }
 
 /** Native exec with SysV args in RDI/RSI (x86-64 only). */
-std::optional<uint32_t> try_exec_x64_eax_args(const uint8_t* code,
-                                              size_t len,
-                                              uint64_t rdi,
-                                              uint64_t rsi);
-inline std::optional<uint32_t> try_exec_x64_eax_args(const std::vector<uint8_t>& code,
-                                                     uint64_t rdi,
-                                                     uint64_t rsi) {
+std::optional<uint32_t>
+try_exec_x64_eax_args(const uint8_t* code, size_t len, uint64_t rdi, uint64_t rsi);
+inline std::optional<uint32_t>
+try_exec_x64_eax_args(const std::vector<uint8_t>& code, uint64_t rdi, uint64_t rsi) {
     return try_exec_x64_eax_args(code.data(), code.size(), rdi, rsi);
 }
 

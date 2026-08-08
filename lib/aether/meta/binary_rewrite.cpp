@@ -37,8 +37,10 @@ std::vector<uint8_t> encode_jmp_rel32(int32_t rel) {
 }
 
 /** Append RX blob to ELF64 file; returns file offset of blob and preferred VA. */
-bool elf_append_rx(std::vector<uint8_t>& file, const std::vector<uint8_t>& blob,
-                   size_t* out_off, uint64_t* out_va) {
+bool elf_append_rx(std::vector<uint8_t>& file,
+                   const std::vector<uint8_t>& blob,
+                   size_t* out_off,
+                   uint64_t* out_va) {
     if (file.size() < 64 || file[4] != 2)
         return false;
     // Align to 0x1000
@@ -114,8 +116,12 @@ bool elf_append_rx(std::vector<uint8_t>& file, const std::vector<uint8_t>& blob,
     return true;
 }
 
-BinaryRewriteResult rewrite_region_whole(std::vector<uint8_t> file, size_t off, size_t size,
-                                         uint64_t vaddr, const std::string& name, BinaryFormat fmt,
+BinaryRewriteResult rewrite_region_whole(std::vector<uint8_t> file,
+                                         size_t off,
+                                         size_t size,
+                                         uint64_t vaddr,
+                                         const std::string& name,
+                                         BinaryFormat fmt,
                                          const MorphEngineConfig& cfg) {
     BinaryRewriteResult r;
     r.format = fmt;
@@ -153,9 +159,12 @@ BinaryRewriteResult rewrite_region_whole(std::vector<uint8_t> file, size_t off, 
 
 } // namespace
 
-BinaryRewriteResult rewrite_functions_in_region(std::vector<uint8_t> file, size_t region_off,
-                                                size_t region_size, uint64_t region_vaddr,
-                                                BinaryFormat fmt, const std::string& name,
+BinaryRewriteResult rewrite_functions_in_region(std::vector<uint8_t> file,
+                                                size_t region_off,
+                                                size_t region_size,
+                                                uint64_t region_vaddr,
+                                                BinaryFormat fmt,
+                                                const std::string& name,
                                                 const MorphEngineConfig& cfg) {
     BinaryRewriteResult r;
     r.format = fmt;
@@ -173,8 +182,8 @@ BinaryRewriteResult rewrite_functions_in_region(std::vector<uint8_t> file, size_
     auto funcs = extract_real_functions(text, region_size, region_vaddr, 4, 192, 4096);
     r.funcs_seen = funcs.size();
     if (funcs.empty())
-        return rewrite_region_whole(std::move(file), region_off, region_size, region_vaddr, name,
-                                    fmt, cfg);
+        return rewrite_region_whole(
+            std::move(file), region_off, region_size, region_vaddr, name, fmt, cfg);
 
     // Collect overflow morph bodies for trampoline append
     struct Overflow {
@@ -196,8 +205,8 @@ BinaryRewriteResult rewrite_functions_in_region(std::vector<uint8_t> file, size_
         c.base_address = ef.vaddr;
         c.verify_pure = false;
         c.require_structural = true;
-        c.product = (cfg.product == ProductMode::Lab) ? ProductMode::IndustryExperimental
-                                                      : cfg.product;
+        c.product =
+            (cfg.product == ProductMode::Lab) ? ProductMode::IndustryExperimental : cfg.product;
 
         // 1) size_fit attempt
         c.size_fit = true;
@@ -361,8 +370,8 @@ BinaryFormat detect_binary_format(const uint8_t* data, size_t len) {
     return BinaryFormat::Raw;
 }
 
-BinaryRewriteResult rewrite_binary_buffer(const uint8_t* data, size_t len,
-                                          const MorphEngineConfig& cfg) {
+BinaryRewriteResult
+rewrite_binary_buffer(const uint8_t* data, size_t len, const MorphEngineConfig& cfg) {
     BinaryRewriteResult r;
     if (!data || !len) {
         r.error = "empty";
@@ -414,8 +423,8 @@ BinaryRewriteResult rewrite_binary_buffer(const uint8_t* data, size_t len,
             r.format = fmt;
             return r;
         }
-        return rewrite_functions_in_region(std::move(file), best_off, best_sz, best_va, fmt,
-                                           "PT_LOAD+X", cfg);
+        return rewrite_functions_in_region(
+            std::move(file), best_off, best_sz, best_va, fmt, "PT_LOAD+X", cfg);
     }
 
     if (fmt == BinaryFormat::Pe32Plus) {
@@ -443,8 +452,8 @@ BinaryRewriteResult rewrite_binary_buffer(const uint8_t* data, size_t len,
             std::memcpy(&chars, sec + 36, 4);
             if (((chars & 0x20000000) || std::strncmp(name, ".text", 5) == 0) && rawsz > 0 &&
                 (size_t)rawptr + rawsz <= file.size()) {
-                return rewrite_functions_in_region(std::move(file), rawptr, rawsz, image_base + va,
-                                                   fmt, name, cfg);
+                return rewrite_functions_in_region(
+                    std::move(file), rawptr, rawsz, image_base + va, fmt, name, cfg);
             }
             sec += 40;
         }
@@ -471,7 +480,8 @@ BinaryRewriteResult rewrite_binary_buffer(const uint8_t* data, size_t len,
     return r;
 }
 
-BinaryRewriteResult rewrite_binary_file(const std::string& in_path, const std::string& out_path,
+BinaryRewriteResult rewrite_binary_file(const std::string& in_path,
+                                        const std::string& out_path,
                                         const MorphEngineConfig& cfg) {
     BinaryRewriteResult r;
     auto elf = load_elf64_text(in_path);
@@ -479,8 +489,13 @@ BinaryRewriteResult rewrite_binary_file(const std::string& in_path, const std::s
         MorphEngineConfig c2 = cfg;
         c2.base_address = elf.vaddr;
         c2.verify_pure = false;
-        auto rr = rewrite_functions_in_region(elf.file_bytes, elf.file_offset, elf.size, elf.vaddr,
-                                              BinaryFormat::Elf64, elf.name, c2);
+        auto rr = rewrite_functions_in_region(elf.file_bytes,
+                                              elf.file_offset,
+                                              elf.size,
+                                              elf.vaddr,
+                                              BinaryFormat::Elf64,
+                                              elf.name,
+                                              c2);
         if (rr.ok && !out_path.empty() && !write_file(out_path, rr.file_bytes)) {
             rr.ok = false;
             rr.error = "write failed";
@@ -492,8 +507,8 @@ BinaryRewriteResult rewrite_binary_file(const std::string& in_path, const std::s
         MorphEngineConfig c2 = cfg;
         c2.base_address = pe.vaddr;
         c2.verify_pure = false;
-        auto rr = rewrite_functions_in_region(pe.file_bytes, pe.file_offset, pe.size, pe.vaddr,
-                                              BinaryFormat::Pe32Plus, pe.name, c2);
+        auto rr = rewrite_functions_in_region(
+            pe.file_bytes, pe.file_offset, pe.size, pe.vaddr, BinaryFormat::Pe32Plus, pe.name, c2);
         if (rr.ok) {
             pe64_fix_checksum(rr.file_bytes);
             std::string verr;

@@ -61,12 +61,12 @@ struct MorphEngineConfig {
     bool verify_pure = true;
     bool multi_input_verify = false; ///< industry: several (rdi,rsi) pairs
     bool verify_native = false;      ///< industry: try_exec multi-input when x86-64
-    bool size_fit = false;          ///< no expand/split/permute; prefer fit in original size
+    bool size_fit = false;           ///< no expand/split/permute; prefer fit in original size
     bool allow_identity_fallback = true;
     bool require_pure = false;
-    bool require_structural = true;  ///< output must re-lift non-empty
+    bool require_structural = true; ///< output must re-lift non-empty
     int extra_lab_passes = 1;
-    double max_size_ratio = 0.0;     ///< fail if blowup exceeds (0 = ignore)
+    double max_size_ratio = 0.0; ///< fail if blowup exceeds (0 = ignore)
     uint64_t base_address = 0x1000;
     uint64_t arg_rdi = 0;
     uint64_t arg_rsi = 0;
@@ -99,7 +99,7 @@ struct MorphEngineResult {
 };
 
 class MorphEngine {
-public:
+  public:
     explicit MorphEngine(MorphEngineConfig cfg = {});
 
     void set_config(const MorphEngineConfig& cfg);
@@ -111,7 +111,7 @@ public:
     std::vector<MorphEngineResult> morph_batch(const std::vector<std::vector<uint8_t>>& inputs,
                                                bool stop_on_fail = false) const;
 
-private:
+  private:
     MorphEngineConfig cfg_;
 };
 

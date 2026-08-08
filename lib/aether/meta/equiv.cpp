@@ -50,8 +50,25 @@ std::vector<SeedCase> corpus() {
          {0x48, 0x31, 0xC0, 0xB8, 0x02, 0x00, 0x00, 0x00, 0x48, 0xFF, 0xC0, 0xC3},
          3},
         {"inc5",
-         {0x48, 0x31, 0xC0, 0x48, 0xFF, 0xC0, 0x48, 0xFF, 0xC0, 0x48, 0xFF, 0xC0, 0x48, 0xFF, 0xC0,
-          0x48, 0xFF, 0xC0, 0xC3},
+         {0x48,
+          0x31,
+          0xC0,
+          0x48,
+          0xFF,
+          0xC0,
+          0x48,
+          0xFF,
+          0xC0,
+          0x48,
+          0xFF,
+          0xC0,
+          0x48,
+          0xFF,
+          0xC0,
+          0x48,
+          0xFF,
+          0xC0,
+          0xC3},
          5},
         {"push_pop_42", {0xB8, 0x2A, 0x00, 0x00, 0x00, 0x50, 0x58, 0xC3}, 42},
         {"jmp_skip", {0x48, 0x31, 0xC0, 0xEB, 0x03, 0x90, 0x90, 0x90, 0xC3}, 0},
@@ -152,13 +169,25 @@ void check_ir(EquivReport& rep,
     ++rep.trials;
     auto got = interpret_rax(again);
     if (!got) {
-        record_break(rep, seed_id, trial, (std::string(path) + "+codec").c_str(), "EduPureRax",
-                     expected, 0, true);
+        record_break(rep,
+                     seed_id,
+                     trial,
+                     (std::string(path) + "+codec").c_str(),
+                     "EduPureRax",
+                     expected,
+                     0,
+                     true);
         return;
     }
     if (*got != expected)
-        record_break(rep, seed_id, trial, (std::string(path) + "+codec").c_str(), "EduPureRax",
-                     expected, *got, false);
+        record_break(rep,
+                     seed_id,
+                     trial,
+                     (std::string(path) + "+codec").c_str(),
+                     "EduPureRax",
+                     expected,
+                     *got,
+                     false);
     // Dual oracle on IR→assemble path (no trailing junk sled)
     maybe_native(rep, code, expected);
 }
@@ -305,10 +334,8 @@ std::optional<uint32_t> try_exec_x64_eax(const uint8_t* code, size_t len) {
     return try_exec_x64_eax_args(code, len, 0, 0);
 }
 
-std::optional<uint32_t> try_exec_x64_eax_args(const uint8_t* code,
-                                              size_t len,
-                                              uint64_t rdi,
-                                              uint64_t rsi) {
+std::optional<uint32_t>
+try_exec_x64_eax_args(const uint8_t* code, size_t len, uint64_t rdi, uint64_t rsi) {
     if (!code || !len)
         return std::nullopt;
 #if defined(__x86_64__) || defined(_M_X64)
@@ -362,15 +389,21 @@ EquivReport run_equivalence_campaign(uint64_t campaign_seed, int rounds_per_seed
             IRFunc base = disasm(sc.bytes.data(), sc.bytes.size());
             auto g = interpret_rax(base);
             if (!g || *g != sc.expected) {
-                record_break(rep, sid, -1, "seed_golden", "EduPureRax", sc.expected, g.value_or(0),
-                             !g);
+                record_break(
+                    rep, sid, -1, "seed_golden", "EduPureRax", sc.expected, g.value_or(0), !g);
                 continue;
             }
             RealFunc rb = disasm_real(sc.bytes.data(), sc.bytes.size(), 0x1000);
             auto rg = interpret_real_pure(rb);
             if (!rg || *rg != sc.expected) {
-                record_break(rep, sid, -1, "seed_golden_real", "RealRestricted", sc.expected,
-                             rg.value_or(0), !rg);
+                record_break(rep,
+                             sid,
+                             -1,
+                             "seed_golden_real",
+                             "RealRestricted",
+                             sc.expected,
+                             rg.value_or(0),
+                             !rg);
             }
             maybe_native(rep, sc.bytes, sc.expected);
         }
@@ -382,8 +415,8 @@ EquivReport run_equivalence_campaign(uint64_t campaign_seed, int rounds_per_seed
                 diversify_implementation(ir);
                 expand(ir);
                 safe_permute_insns(ir);
-                check_ir(rep, hashes, paths, sid, t, "wc_permute+div+exp", std::move(ir),
-                         sc.expected);
+                check_ir(
+                    rep, hashes, paths, sid, t, "wc_permute+div+exp", std::move(ir), sc.expected);
             }
             {
                 // Def-use gate smoke: independent swaps must preserve RAX
@@ -392,8 +425,8 @@ EquivReport run_equivalence_campaign(uint64_t campaign_seed, int rounds_per_seed
                 expand(ir);
                 safe_permute_insns(ir);
                 safe_permute_insns(ir);
-                check_ir(rep, hashes, paths, sid, t, "safe_permute_insns", std::move(ir),
-                         sc.expected);
+                check_ir(
+                    rep, hashes, paths, sid, t, "safe_permute_insns", std::move(ir), sc.expected);
             }
             {
                 IRFunc ir = disasm(sc.bytes.data(), sc.bytes.size());
@@ -407,8 +440,8 @@ EquivReport run_equivalence_campaign(uint64_t campaign_seed, int rounds_per_seed
                 expand(ir);
                 apply_layer_mode(ir, static_cast<LayerMode>(m));
                 char label[48];
-                std::snprintf(label, sizeof(label), "layer:%s",
-                              layer_mode_name(static_cast<LayerMode>(m)));
+                std::snprintf(
+                    label, sizeof(label), "layer:%s", layer_mode_name(static_cast<LayerMode>(m)));
                 check_ir(rep, hashes, paths, sid, t, label, std::move(ir), sc.expected);
             }
             {
@@ -416,8 +449,8 @@ EquivReport run_equivalence_campaign(uint64_t campaign_seed, int rounds_per_seed
                 check_bytes(rep, hashes, paths, sid, t, "morph_stage", code, sc.expected);
             }
             {
-                auto code = morph_stage_mode(sc.bytes.data(), sc.bytes.size(),
-                                             LayerMode::PermuteHeavy, nullptr);
+                auto code = morph_stage_mode(
+                    sc.bytes.data(), sc.bytes.size(), LayerMode::PermuteHeavy, nullptr);
                 check_bytes(rep, hashes, paths, sid, t, "morph:PermuteHeavy", code, sc.expected);
             }
             // Byte multi-stage (normalize_reachable after each gen)
@@ -457,11 +490,11 @@ EquivReport run_equivalence_campaign(uint64_t campaign_seed, int rounds_per_seed
                     hashes.insert(hash64(onion));
                     auto got = interpret_rax(disasm(onion.data(), onion.size()));
                     if (!got)
-                        record_break(rep, sid, t, "cascade_peel", "CascadeLeaf", sc.expected, 0,
-                                     true);
+                        record_break(
+                            rep, sid, t, "cascade_peel", "CascadeLeaf", sc.expected, 0, true);
                     else if (*got != sc.expected)
-                        record_break(rep, sid, t, "cascade_peel", "CascadeLeaf", sc.expected, *got,
-                                     false);
+                        record_break(
+                            rep, sid, t, "cascade_peel", "CascadeLeaf", sc.expected, *got, false);
                 }
             }
         }
@@ -506,15 +539,21 @@ EquivReport run_equivalence_campaign(uint64_t campaign_seed, int rounds_per_seed
                     ++rep.real_trials;
                     paths.insert("real_text_gadget");
                     if (m.empty()) {
-                        record_break(rep, -2, (int)i, "real_text_gadget", "RealRestricted", imm, 0,
-                                     true);
+                        record_break(
+                            rep, -2, (int)i, "real_text_gadget", "RealRestricted", imm, 0, true);
                         continue;
                     }
                     hashes.insert(hash64(m));
                     auto v = interpret_real_pure(disasm_real(m.data(), m.size(), 0x1000));
                     if (!v || *v != imm)
-                        record_break(rep, -2, (int)i, "real_text_gadget", "RealRestricted", imm,
-                                     v.value_or(0), !v);
+                        record_break(rep,
+                                     -2,
+                                     (int)i,
+                                     "real_text_gadget",
+                                     "RealRestricted",
+                                     imm,
+                                     v.value_or(0),
+                                     !v);
                 }
             }
         } else {

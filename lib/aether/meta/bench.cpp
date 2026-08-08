@@ -35,10 +35,8 @@ bool has_je_bytes(const std::vector<uint8_t>& code) {
 
 } // namespace
 
-BenchReport run_morph_bench(size_t pure_count,
-                            const char* elf_path,
-                            uint64_t seed,
-                            int morph_rounds) {
+BenchReport
+run_morph_bench(size_t pure_count, const char* elf_path, uint64_t seed, int morph_rounds) {
     BenchReport rep;
     rep.scope_line = "x86-64 ELF/PE/raw; analysis-gated morph (split/diversify/shuffle/permute); "
                      "pure RAX+RDI/RSI + structural";
@@ -70,7 +68,8 @@ BenchReport run_morph_bench(size_t pure_count,
                 morph_real(ef.bytes.data(), ef.bytes.size(), ef.vaddr, MorphPolicy::Safe);
             if (morphed.empty()) {
                 // Fallback: identity re-layout (disasm/assemble only)
-                aether::RealFunc id = aether::disasm_real(ef.bytes.data(), ef.bytes.size(), ef.vaddr);
+                aether::RealFunc id =
+                    aether::disasm_real(ef.bytes.data(), ef.bytes.size(), ef.vaddr);
                 morphed = aether::assemble_real(id);
             }
             if (morphed.empty()) {
@@ -129,8 +128,8 @@ BenchReport run_morph_bench(size_t pure_count,
                          std::chrono::steady_clock::now() - t0)
                          .count();
     // Final gate: large corpus + hundreds of ELF-extracted funcs + zero breaks
-    rep.pass = (rep.corpus_total >= 1000) && (rep.corpus_elf >= 200) && (breaks == 0) &&
-               (attempts > 0);
+    rep.pass =
+        (rep.corpus_total >= 1000) && (rep.corpus_elf >= 200) && (breaks == 0) && (attempts > 0);
     return rep;
 }
 
@@ -150,8 +149,7 @@ std::string format_bench_report(const BenchReport& r) {
       << "  break_rate: " << r.break_rate << "\n"
       << "  size_ratio: " << r.avg_size_ratio << "  elapsed_ms=" << r.elapsed_ms << "\n"
       << "  ───────────────────────────────────────────────────────\n"
-      << "  VERDICT   : "
-      << (r.pass ? "PASS  (0 breaks, corpus≥1000, elf≥200)" : "FAIL") << "\n";
+      << "  VERDICT   : " << (r.pass ? "PASS  (0 breaks, corpus≥1000, elf≥200)" : "FAIL") << "\n";
     if (!r.first_failure.empty())
         o << "  first fail: " << r.first_failure << "\n";
     o << "═══════════════════════════════════════════════════════════\n";

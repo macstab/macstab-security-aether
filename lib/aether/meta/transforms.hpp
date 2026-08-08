@@ -53,7 +53,7 @@ enum class EffectBit : uint8_t {
     Rcx = 1 << 1,
     Zf = 1 << 2,
     Stack = 1 << 3,
-    Ctrl = 1 << 4, ///< JMP/JE/RET — never reorder past
+    Ctrl = 1 << 4,   ///< JMP/JE/RET — never reorder past
     Opaque = 1 << 5, ///< RAW — conservatively blocks reordering
 };
 

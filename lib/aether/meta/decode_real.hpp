@@ -29,10 +29,8 @@ namespace aether {
  * @param max_insns     safety cap (default 100000)
  * @return RealFunc with linear insns + basic blocks; empty on hard failure
  */
-RealFunc disasm_real(const uint8_t* code,
-                     size_t len,
-                     uint64_t base_address = 0,
-                     size_t max_insns = 100000);
+RealFunc
+disasm_real(const uint8_t* code, size_t len, uint64_t base_address = 0, size_t max_insns = 100000);
 
 /**
  * Build CFG blocks on an already-filled RealFunc::insns (recomputes blocks).

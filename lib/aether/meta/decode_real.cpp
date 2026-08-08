@@ -20,35 +20,54 @@ namespace {
 
 uint32_t zydis_reg_mask(ZydisRegister reg) {
     switch (reg) {
-    case ZYDIS_REGISTER_AL: case ZYDIS_REGISTER_AH: case ZYDIS_REGISTER_AX:
-    case ZYDIS_REGISTER_EAX: case ZYDIS_REGISTER_RAX:
+    case ZYDIS_REGISTER_AL:
+    case ZYDIS_REGISTER_AH:
+    case ZYDIS_REGISTER_AX:
+    case ZYDIS_REGISTER_EAX:
+    case ZYDIS_REGISTER_RAX:
         return kGprRax;
-    case ZYDIS_REGISTER_CL: case ZYDIS_REGISTER_CH: case ZYDIS_REGISTER_CX:
-    case ZYDIS_REGISTER_ECX: case ZYDIS_REGISTER_RCX:
+    case ZYDIS_REGISTER_CL:
+    case ZYDIS_REGISTER_CH:
+    case ZYDIS_REGISTER_CX:
+    case ZYDIS_REGISTER_ECX:
+    case ZYDIS_REGISTER_RCX:
         return kGprRcx;
-    case ZYDIS_REGISTER_DL: case ZYDIS_REGISTER_DH: case ZYDIS_REGISTER_DX:
-    case ZYDIS_REGISTER_EDX: case ZYDIS_REGISTER_RDX:
+    case ZYDIS_REGISTER_DL:
+    case ZYDIS_REGISTER_DH:
+    case ZYDIS_REGISTER_DX:
+    case ZYDIS_REGISTER_EDX:
+    case ZYDIS_REGISTER_RDX:
         return kGprRdx;
-    case ZYDIS_REGISTER_BL: case ZYDIS_REGISTER_BH: case ZYDIS_REGISTER_BX:
-    case ZYDIS_REGISTER_EBX: case ZYDIS_REGISTER_RBX:
+    case ZYDIS_REGISTER_BL:
+    case ZYDIS_REGISTER_BH:
+    case ZYDIS_REGISTER_BX:
+    case ZYDIS_REGISTER_EBX:
+    case ZYDIS_REGISTER_RBX:
         return kGprRbx;
-    case ZYDIS_REGISTER_SPL: case ZYDIS_REGISTER_SP: case ZYDIS_REGISTER_ESP:
+    case ZYDIS_REGISTER_SPL:
+    case ZYDIS_REGISTER_SP:
+    case ZYDIS_REGISTER_ESP:
     case ZYDIS_REGISTER_RSP:
         return kGprRsp;
-    case ZYDIS_REGISTER_BPL: case ZYDIS_REGISTER_BP: case ZYDIS_REGISTER_EBP:
+    case ZYDIS_REGISTER_BPL:
+    case ZYDIS_REGISTER_BP:
+    case ZYDIS_REGISTER_EBP:
     case ZYDIS_REGISTER_RBP:
         return kGprRbp;
-    case ZYDIS_REGISTER_SIL: case ZYDIS_REGISTER_SI: case ZYDIS_REGISTER_ESI:
+    case ZYDIS_REGISTER_SIL:
+    case ZYDIS_REGISTER_SI:
+    case ZYDIS_REGISTER_ESI:
     case ZYDIS_REGISTER_RSI:
         return kGprRsi;
-    case ZYDIS_REGISTER_DIL: case ZYDIS_REGISTER_DI: case ZYDIS_REGISTER_EDI:
+    case ZYDIS_REGISTER_DIL:
+    case ZYDIS_REGISTER_DI:
+    case ZYDIS_REGISTER_EDI:
     case ZYDIS_REGISTER_RDI:
         return kGprRdi;
     default:
         return 0;
     }
 }
-
 
 bool is_terminator(const ZydisDecodedInstruction& ins) {
     switch (ins.meta.category) {
@@ -89,8 +108,8 @@ RealFunc disasm_real(const uint8_t* code, size_t len, uint64_t base_address, siz
     while (offset < len && f.insns.size() < max_insns) {
         ZydisDecodedInstruction instruction;
         ZydisDecodedOperand operands[ZYDIS_MAX_OPERAND_COUNT];
-        ZyanStatus st = ZydisDecoderDecodeFull(
-            &decoder, code + offset, len - offset, &instruction, operands);
+        ZyanStatus st =
+            ZydisDecoderDecodeFull(&decoder, code + offset, len - offset, &instruction, operands);
         if (!ZYAN_SUCCESS(st)) {
             // Invalid byte: record as 1-byte unknown and continue (robust lift).
             RealInsn bad;
@@ -136,10 +155,9 @@ RealFunc disasm_real(const uint8_t* code, size_t len, uint64_t base_address, siz
         // Effect model (industry Phase I–II)
         if (instruction.cpu_flags) {
             in.reads_flags = (instruction.cpu_flags->tested != 0);
-            in.writes_flags = (instruction.cpu_flags->modified != 0) ||
-                              (instruction.cpu_flags->set_0 != 0) ||
-                              (instruction.cpu_flags->set_1 != 0) ||
-                              (instruction.cpu_flags->undefined != 0);
+            in.writes_flags =
+                (instruction.cpu_flags->modified != 0) || (instruction.cpu_flags->set_0 != 0) ||
+                (instruction.cpu_flags->set_1 != 0) || (instruction.cpu_flags->undefined != 0);
         }
         for (ZyanU8 i = 0; i < instruction.operand_count; i++) {
             const auto& op = operands[i];
@@ -158,7 +176,8 @@ RealFunc disasm_real(const uint8_t* code, size_t len, uint64_t base_address, siz
                 in.gpr_read |= bm | im;
             } else if (op.type == ZYDIS_OPERAND_TYPE_IMMEDIATE && op.imm.is_relative) {
                 uint64_t target = 0;
-                if (ZYAN_SUCCESS(ZydisCalcAbsoluteAddress(&instruction, &op, in.address, &target))) {
+                if (ZYAN_SUCCESS(
+                        ZydisCalcAbsoluteAddress(&instruction, &op, in.address, &target))) {
                     in.has_imm_target = true;
                     in.branch_target = target;
                 }

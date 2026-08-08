@@ -28,17 +28,13 @@ jobs:
       - name: Install clang-format
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends clang-format
+          sudo apt-get install -y --no-install-recommends clang-format cmake
           clang-format --version
-      - name: Configure + format-check
+      - name: format-check (requires cmake cache in build/)
         run: |
-          cmake -S . -B build-fmt -DCMAKE_BUILD_TYPE=Release
-          # format-check target may be absent if clang-format missing on runner path
-          if cmake --build build-fmt --target help 2>/dev/null | grep -q format-check; then
-            cmake --build build-fmt --target format-check
-          else
-            echo "format-check target unavailable — skip"
-          fi
+          # Must configure first — "could not load cache" means no build/ dir
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --target format-check
 
   unit:
     name: build-and-test (${{ matrix.os }})

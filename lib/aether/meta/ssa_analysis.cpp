@@ -20,8 +20,8 @@ void fill_from_insn(const RealInsn& in, InsnDataflow& d) {
     d.def_flags = in.writes_flags;
     d.use_flags = in.reads_flags;
     d.is_call = in.is_call;
-    d.is_control = in.is_ret || in.is_uncond_jump || in.is_cond_jump || in.is_call ||
-                   in.stops_fallthrough;
+    d.is_control =
+        in.is_ret || in.is_uncond_jump || in.is_cond_jump || in.is_call || in.stops_fallthrough;
     d.mem_use = in.has_memory;
     d.mem_def = in.has_memory; // conservative: treat mem as both if unknown
     d.stack_only_mem = false;

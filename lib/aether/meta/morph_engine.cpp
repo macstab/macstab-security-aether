@@ -13,10 +13,10 @@
 #include "aether/meta/binary_rewrite.hpp"
 #include "aether/meta/decode_real.hpp"
 #include "aether/meta/elf_view.hpp"
-#include "aether/meta/pe_view.hpp"
 #include "aether/meta/equiv.hpp"
-#include "aether/meta/x64_sim.hpp"
+#include "aether/meta/pe_view.hpp"
 #include "aether/meta/real_func_extract.hpp"
+#include "aether/meta/x64_sim.hpp"
 
 #include <sstream>
 
@@ -30,7 +30,12 @@ bool multi_input_ok(const RealFunc& in_f, const RealFunc& out_f) {
         return true;
     // Fallback classic pure interpret
     static const uint64_t kPairs[][2] = {
-        {0, 0}, {1, 2}, {0xFFu, 0xAAu}, {7, 0}, {0, 9}, {0x1234u, 0x5678u},
+        {0, 0},
+        {1, 2},
+        {0xFFu, 0xAAu},
+        {7, 0},
+        {0, 9},
+        {0x1234u, 0x5678u},
     };
     size_t checked = 0;
     for (const auto& p : kPairs) {
@@ -52,7 +57,10 @@ bool native_multi_input_ok(const std::vector<uint8_t>& in_bytes,
                            size_t* breaks_out) {
     size_t checked = 0, breaks = 0;
     static const uint64_t kPairs[][2] = {
-        {0, 0}, {1, 2}, {0xFFu, 0xAAu}, {3, 5},
+        {0, 0},
+        {1, 2},
+        {0xFFu, 0xAAu},
+        {3, 5},
     };
     for (const auto& p : kPairs) {
         auto exp = try_exec_x64_eax_args(in_bytes.data(), in_bytes.size(), p[0], p[1]);

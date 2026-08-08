@@ -325,7 +325,14 @@ std::optional<uint32_t> sim_real_func(const RealFunc& f, uint64_t rdi, uint64_t 
 
 bool sim_multi_input_equiv(const RealFunc& a, const RealFunc& b, size_t* checked) {
     static const uint64_t kPairs[][2] = {
-        {0, 0}, {1, 2}, {0xFFu, 0xAAu}, {7, 0}, {0, 9}, {0x1234u, 0x5678u}, {3, 5}, {100, 200},
+        {0, 0},
+        {1, 2},
+        {0xFFu, 0xAAu},
+        {7, 0},
+        {0, 9},
+        {0x1234u, 0x5678u},
+        {3, 5},
+        {100, 200},
     };
     size_t n = 0;
     for (const auto& p : kPairs) {
@@ -342,8 +349,8 @@ bool sim_multi_input_equiv(const RealFunc& a, const RealFunc& b, size_t* checked
     return n > 0;
 }
 
-std::optional<uint32_t> sim_x64_buffer(const uint8_t* code, size_t len, uint64_t rdi, uint64_t rsi,
-                                       uint64_t base) {
+std::optional<uint32_t>
+sim_x64_buffer(const uint8_t* code, size_t len, uint64_t rdi, uint64_t rsi, uint64_t base) {
     if (!code || !len)
         return std::nullopt;
     RealFunc f = disasm_real(code, len, base);

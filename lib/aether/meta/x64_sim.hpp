@@ -41,7 +41,7 @@ std::optional<uint32_t> sim_real_func(const RealFunc& f, uint64_t rdi = 0, uint6
 bool sim_multi_input_equiv(const RealFunc& a, const RealFunc& b, size_t* checked = nullptr);
 
 /** Decode + simulate raw buffer. */
-std::optional<uint32_t> sim_x64_buffer(const uint8_t* code, size_t len, uint64_t rdi, uint64_t rsi,
-                                       uint64_t base = 0x1000);
+std::optional<uint32_t>
+sim_x64_buffer(const uint8_t* code, size_t len, uint64_t rdi, uint64_t rsi, uint64_t base = 0x1000);
 
 } // namespace aether

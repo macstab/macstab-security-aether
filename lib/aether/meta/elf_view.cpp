@@ -93,7 +93,8 @@ ElfTextRegion load_elf64_text(const std::string& path) {
                         sizeof(strsh));
             const char* strtab = nullptr;
             if (strsh.sh_offset + strsh.sh_size <= r.file_bytes.size())
-                strtab = reinterpret_cast<const char*>(r.file_bytes.data() + (size_t)strsh.sh_offset);
+                strtab =
+                    reinterpret_cast<const char*>(r.file_bytes.data() + (size_t)strsh.sh_offset);
 
             for (size_t i = 0; i < shnum; i++) {
                 Shdr64 sh{};

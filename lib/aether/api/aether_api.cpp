@@ -19,7 +19,6 @@
 #include <fstream>
 #include <vector>
 
-
 namespace {
 bool g_license_accepted = false;
 
@@ -118,8 +117,7 @@ aether_status aether_morph_buffer_ex(const uint8_t* in,
         cfg.product = aether::ProductMode::Lab;
     cfg.verify_pure = true;
     cfg.allow_identity_fallback = true;
-    if (aggr == AETHER_AGGR_INDUSTRY_EXPERIMENTAL &&
-        product != AETHER_PRODUCT_INDUSTRY)
+    if (aggr == AETHER_AGGR_INDUSTRY_EXPERIMENTAL && product != AETHER_PRODUCT_INDUSTRY)
         cfg.product = aether::ProductMode::IndustryExperimental;
     if (cfg.product == aether::ProductMode::Industry) {
         cfg.multi_input_verify = true;
@@ -160,13 +158,13 @@ aether_status aether_morph_file(const char* in_path, const char* out_path, aethe
     std::ifstream in(in_path, std::ios::binary);
     if (!in)
         return AETHER_ERR_IO;
-    std::vector<uint8_t> buf((std::istreambuf_iterator<char>(in)), std::istreambuf_iterator<char>());
+    std::vector<uint8_t> buf((std::istreambuf_iterator<char>(in)),
+                             std::istreambuf_iterator<char>());
     if (buf.empty())
         return AETHER_ERR_INVAL;
     uint8_t* out = nullptr;
     size_t out_len = 0;
-    aether_status st =
-        aether_morph_buffer(buf.data(), buf.size(), 0x1000, aggr, &out, &out_len);
+    aether_status st = aether_morph_buffer(buf.data(), buf.size(), 0x1000, aggr, &out, &out_len);
     if (st != AETHER_OK)
         return st;
     std::ofstream o(out_path, std::ios::binary);

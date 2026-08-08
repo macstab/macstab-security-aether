@@ -38,7 +38,7 @@ struct BenchReport {
     size_t native_checked = 0;
     size_t native_breaks = 0;
 
-    double break_rate = 1.0; ///< (pure_breaks + structural_breaks) / max(1, morph attempts)
+    double break_rate = 1.0;     ///< (pure_breaks + structural_breaks) / max(1, morph attempts)
     double avg_size_ratio = 1.0; ///< mean(out_len / in_len) over successful morphs
     uint64_t elapsed_ms = 0;
     bool pass = false; ///< break_rate == 0 && corpus_total >= min_corpus && elf>=200

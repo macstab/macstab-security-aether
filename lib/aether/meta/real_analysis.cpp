@@ -35,7 +35,8 @@ RealEffectClass classify_real_insn(const RealInsn& in) {
         return RealEffectClass::Identity;
     if (b.size() >= 3 && b[0] == 0x48 && b[1] == 0x8D && b[2] == 0x00)
         return RealEffectClass::Identity;
-    if (b.size() >= 5 && b[0] == 0x48 && b[1] == 0x8D && b[2] == 0x64 && b[3] == 0x24 && b[4] == 0x00)
+    if (b.size() >= 5 && b[0] == 0x48 && b[1] == 0x8D && b[2] == 0x64 && b[3] == 0x24 &&
+        b[4] == 0x00)
         return RealEffectClass::Identity;
 
     // rax family
@@ -90,8 +91,7 @@ RealEffectClass classify_real_insn(const RealInsn& in) {
         return RealEffectClass::Identity;
 
     // Zydis said no memory and not control → PureGpr if only GPRs touched
-    if (!in.has_memory && (in.gpr_read | in.gpr_write) != 0 &&
-        (in.gpr_write & kGprRsp) == 0) {
+    if (!in.has_memory && (in.gpr_read | in.gpr_write) != 0 && (in.gpr_write & kGprRsp) == 0) {
         return RealEffectClass::PureGpr;
     }
 

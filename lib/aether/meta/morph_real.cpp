@@ -129,7 +129,9 @@ struct EdgeFix {
     int target_block = -1;
 };
 
-void patch_rel32(std::vector<uint8_t>& code, const EdgeFix& fx, const std::vector<size_t>& block_off) {
+void patch_rel32(std::vector<uint8_t>& code,
+                 const EdgeFix& fx,
+                 const std::vector<size_t>& block_off) {
     if (fx.target_block < 0 || fx.target_block >= (int)block_off.size())
         return;
     int32_t rel = (int32_t)((int64_t)block_off[(size_t)fx.target_block] - (int64_t)fx.instr_end);
@@ -459,10 +461,8 @@ void real_safe_shuffle_insns(RealFunc& f) {
     }
 }
 
-std::vector<uint8_t> morph_real(const uint8_t* code,
-                                size_t len,
-                                uint64_t base_address,
-                                MorphPolicy policy) {
+std::vector<uint8_t>
+morph_real(const uint8_t* code, size_t len, uint64_t base_address, MorphPolicy policy) {
     // Delegate to industry MorphEngine (single pipeline implementation).
     MorphEngineConfig cfg;
     cfg.policy = policy;
@@ -528,9 +528,10 @@ void real_split_blocks(RealFunc& f, size_t max_insns) {
     }
     f.insns.swap(ni);
     f.blocks.swap(nb);
-    f.entry = (f.entry >= 0 && f.entry < (int)old_to_first.size() && old_to_first[(size_t)f.entry] >= 0)
-                  ? old_to_first[(size_t)f.entry]
-                  : 0;
+    f.entry =
+        (f.entry >= 0 && f.entry < (int)old_to_first.size() && old_to_first[(size_t)f.entry] >= 0)
+            ? old_to_first[(size_t)f.entry]
+            : 0;
     size_t off = 0;
     for (auto& in : f.insns) {
         in.offset = off;

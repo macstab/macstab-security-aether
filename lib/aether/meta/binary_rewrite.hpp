@@ -56,15 +56,19 @@ struct BinaryRewriteResult {
 
 BinaryFormat detect_binary_format(const uint8_t* data, size_t len);
 
-BinaryRewriteResult rewrite_binary_buffer(const uint8_t* data, size_t len,
-                                          const MorphEngineConfig& cfg);
+BinaryRewriteResult
+rewrite_binary_buffer(const uint8_t* data, size_t len, const MorphEngineConfig& cfg);
 
-BinaryRewriteResult rewrite_binary_file(const std::string& in_path, const std::string& out_path,
+BinaryRewriteResult rewrite_binary_file(const std::string& in_path,
+                                        const std::string& out_path,
                                         const MorphEngineConfig& cfg);
 
-BinaryRewriteResult rewrite_functions_in_region(std::vector<uint8_t> file, size_t region_off,
-                                                size_t region_size, uint64_t region_vaddr,
-                                                BinaryFormat fmt, const std::string& name,
+BinaryRewriteResult rewrite_functions_in_region(std::vector<uint8_t> file,
+                                                size_t region_off,
+                                                size_t region_size,
+                                                uint64_t region_vaddr,
+                                                BinaryFormat fmt,
+                                                const std::string& name,
                                                 const MorphEngineConfig& cfg);
 
 bool industry_rewrite_selftest();

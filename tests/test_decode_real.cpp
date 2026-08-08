@@ -16,7 +16,8 @@ void test_decode_real() {
     TEST_CHECK(kTest, f.insns.size() >= 3);
     TEST_CHECK(kTest, f.blocks.size() >= 1);
     TEST_CHECK(kTest, f.insns[0].length == 3);
-    TEST_CHECK(kTest, f.insns.back().is_ret || f.insns.back().text.find("ret") != std::string::npos);
+    TEST_CHECK(kTest,
+               f.insns.back().is_ret || f.insns.back().text.find("ret") != std::string::npos);
 
     // Branch target resolution: jmp +0 (eb 00)
     const uint8_t jmp[] = {0xEB, 0x00, 0x90, 0xC3};

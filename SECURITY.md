@@ -18,11 +18,11 @@ traversal in lab helpers, unsafe defaults):
 
 ## Known residual risk (research honesty)
 
-| Surface | Notes |
-|---------|--------|
-| Controlled ELF infection | Only the single path named on CLI; operator responsibility |
-| Native code exec in tests | Lab/x86-64 only; restricted pure functions |
-| Stubs | Empty advanced techniques — do not treat as implemented |
+| Surface                   | Notes                                                      |
+|---------------------------|------------------------------------------------------------|
+| Controlled ELF infection  | Only the single path named on CLI; operator responsibility |
+| Native code exec in tests | Lab/x86-64 only; restricted pure functions                 |
+| Stubs                     | Empty advanced techniques — do not treat as implemented    |
 
 See `docs/SCORECARD.md` residual detection surfaces.
 

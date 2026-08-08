@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Adopt Macstab chaos-testing-libraries pipeline for CI and release
 
+- Pin clang-format-18 so CI matches format (not brew 22)
+
 
 ### Documentation
 
@@ -23,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Remove outdated BRAINSTORMING.md file
 
+- Update CHANGELOG for v1.0.0 (#1)
+
 
 ### Miscellaneous
 
@@ -32,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Refactoring
 
 - Product repo layout + license acceptance
+
+
+### Style
+
+- Clang-format sources so CI format-check passes
 
 
 

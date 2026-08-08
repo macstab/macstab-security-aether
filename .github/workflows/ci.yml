@@ -1,4 +1,5 @@
 # Adapted from Macstab chaos-testing-libraries CI (proven pipeline shape).
+# clang-format is PINNED to 18 so local vs CI do not drift (apt default vs brew 22 diverge).
 name: ci
 
 on:
@@ -21,20 +22,22 @@ env:
 
 jobs:
   fmt:
-    name: clang-format check
+    name: clang-format-18 check
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Install clang-format
+      - name: Install pinned clang-format-18
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends clang-format cmake
-          clang-format --version
-      - name: format-check (requires cmake cache in build/)
+          sudo apt-get install -y --no-install-recommends clang-format-18
+          clang-format-18 --version
+      - name: format-check (clang-format-18 only)
         run: |
-          # Must configure first — "could not load cache" means no build/ dir
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-          cmake --build build --target format-check
+          set -euo pipefail
+          # Direct dry-run — no cmake cache required (avoids "could not load cache")
+          mapfile -t FILES < <(find lib apps include tests stubs -type f \( -name '*.cpp' -o -name '*.hpp' -o -name '*.h' -o -name '*.c' \) | sort)
+          echo "Checking ${#FILES[@]} files with clang-format-18"
+          clang-format-18 --dry-run --Werror --style=file "${FILES[@]}"
 
   unit:
     name: build-and-test (${{ matrix.os }})
@@ -98,5 +101,4 @@ jobs:
             -e AETHER_LICENSE_ACCEPTED=I_ACCEPT_AETHER_LICENSE \
             aether-lab \
             ./build/aether_core_tests equivalence | tee /tmp/lab-equiv.txt
-          # Native checks may be zero if image not truly x86_64; require 0 breaks always
           grep -q 'breaks=0' /tmp/lab-equiv.txt || grep -qi pass /tmp/lab-equiv.txt

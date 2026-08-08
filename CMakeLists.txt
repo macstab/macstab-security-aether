@@ -236,7 +236,7 @@ file(GLOB_RECURSE AETHER_FORMAT_SOURCES
     ${CMAKE_SOURCE_DIR}/tests/*.hpp
 )
 
-find_program(CLANG_FORMAT_EXE NAMES clang-format clang-format-18 clang-format-17 clang-format-16)
+find_program(CLANG_FORMAT_EXE NAMES clang-format-18 clang-format-17 clang-format-16 clang-format)
 
 if(CLANG_FORMAT_EXE)
     add_custom_target(format

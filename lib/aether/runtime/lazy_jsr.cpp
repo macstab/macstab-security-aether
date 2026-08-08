@@ -38,7 +38,7 @@ LazyResult* g_result = nullptr;
 std::vector<uint8_t>* g_out_body = nullptr;
 
 long sample_wall_time_ms() {
-    struct timeval tv{};
+    struct timeval tv {};
     gettimeofday(&tv, nullptr);
     return static_cast<long>(tv.tv_sec) * 1000L + static_cast<long>(tv.tv_usec) / 1000L;
 }
@@ -46,7 +46,7 @@ long sample_wall_time_ms() {
 void idle_fn() {
     (void)sample_wall_time_ms();
     do_random_noise(1);
-    struct timespec ts{};
+    struct timespec ts {};
     clock_gettime(CLOCK_MONOTONIC, &ts);
     (void)ts;
 }
